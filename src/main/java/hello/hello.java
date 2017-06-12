@@ -19,6 +19,13 @@ public class hello {
         return "Hello World!";
     }
 
+
+    @RequestMapping("/test")
+    @ResponseBody
+    String test(String arg1,String arg2) {
+        return "Hello World!:"+arg1+":"+arg2;
+    }
+
     public static void main(String[] args) throws Exception {
         SpringApplication.run(hello.class, args);
     }
