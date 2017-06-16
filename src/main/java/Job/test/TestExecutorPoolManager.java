@@ -6,6 +6,7 @@ import Job.AbstractExecutorJobPoolManager;
 import Job.JobGroupResult;
 import Job.JobPool;
 import Job.JobPoolManager;
+import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +35,7 @@ public class TestExecutorPoolManager extends AbstractExecutorJobPoolManager
     {
         for(int i=0;i<maxGroupSize;i++)
         {
-            System.out.println("add "+i);
-            jobGroupList.add(new TestExecutorJobPool());
+            jobGroupList.add(new TestExecutorJobPool("pool"+i));
         }
     }
 
@@ -58,25 +58,34 @@ public class TestExecutorPoolManager extends AbstractExecutorJobPoolManager
 
     public static void main(String[] args) throws InterruptedException
     {
-        String groupName="zhou";
-        List<TestJob> testJobList=new ArrayList<>();
-        for(int i=0;i<40;i++)
-        {
-            testJobList.add(new TestJob(""+i,groupName));
+
+        for(int t=0;t<20;t++){
+            String groupName="ZZZ"+t;
+            List<TestJob> testJobList=new ArrayList<>();
+            for(int i=0;i<40;i++)
+            {
+                testJobList.add(new TestJob(""+i,groupName));
+            }
+            TestExecutorPoolManager.getInstance().getMostFreeJobPool().commitJobs(new TestJobGroup(groupName,testJobList.size(),testJobList));
         }
 
-        String groupName2="zhou2";
+
+        String groupName2="HHH";
         List<TestJob> testJobList2=new ArrayList<>();
         for(int i=0;i<40;i++)
         {
             testJobList2.add(new TestJob(""+i,groupName2));
         }
-        TestExecutorPoolManager.getInstance().getMostFreeJobGroup().commitJobs(new TestJobGroup(groupName,testJobList.size(),testJobList));
-        TestExecutorPoolManager.getInstance().getMostFreeJobGroup().commitJobs(new TestJobGroup(groupName,testJobList.size(),testJobList2));
+//        TestExecutorPoolManager.getInstance().getMostFreeJobPool().commitJobs(new TestJobGroup(groupName,testJobList.size(),testJobList));
+//        TestExecutorPoolManager.getInstance().getMostFreeJobPool().commitJobs(new TestJobGroup(groupName2,testJobList.size(),testJobList2));
 
 
-        Thread.sleep(4000);
-        JobGroupResult result= TestExecutorPoolManager.getInstance().getJobProgressResultByGroupName(groupName);
-        System.out.println(JSON.toJSON(result));
+        for(int i=0;i<10;i++) {
+            Thread.sleep(5000);
+            JobGroupResult result = TestExecutorPoolManager.getInstance().getJobProgressResultByGroupName("ZZZ3");
+            System.out.println(JSON.toJSON(result));
+        }
+
+
     }
 }

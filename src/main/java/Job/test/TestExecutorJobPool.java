@@ -10,11 +10,17 @@ import Job.JobPoolManager;
  */
 public class TestExecutorJobPool extends AbstractExecutorJobPool
 {
+    private String name;
     private JobPoolManager jobPoolManager;
     @Override
     public int getMaxConcurrentJobSize()
     {
         return 10;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -29,15 +35,16 @@ public class TestExecutorJobPool extends AbstractExecutorJobPool
         return TestExecutorPoolManager.getInstance();
     }
 
-    public TestExecutorJobPool()
+    public TestExecutorJobPool(String name)
     {
+        this.name=name;
         init();
     }
 
     @Override
-    public JobPool newInstance(JobPoolManager jobPoolManager)
+    public JobPool newInstance(String name)
     {
-        JobPool jobPool= new TestExecutorJobPool();
+        JobPool jobPool= new TestExecutorJobPool(name);
         return jobPool;
     }
 }

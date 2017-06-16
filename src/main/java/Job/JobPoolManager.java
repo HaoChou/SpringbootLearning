@@ -19,7 +19,7 @@ public interface JobPoolManager
      * 获取最空闲的工作组（如果都忙碌 就将剩余job最少的工作组 定义为最空闲的）
      * @return
      */
-    JobPool getMostFreeJobGroup();
+    JobPool getMostFreeJobPool();
 
 
     JobGroupResult getJobProgressResultByGroupName(String jobGroupName);
@@ -47,5 +47,7 @@ public interface JobPoolManager
      * @param jobGroupResult
      */
     void pushJobGroupResult(JobGroupResult jobGroupResult);
+
+    int getBiggestFreeQueueCount();
 
 }

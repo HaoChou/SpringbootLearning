@@ -7,10 +7,12 @@ package Job;
 public interface JobPool
 {
     /**
-     * 工作组中最多的工人数 线程数
+     * 工作组中最多的并行数 线程数
      * @return
      */
     int getMaxConcurrentJobSize();
+
+    String getName();
 
     /**
      * 最大等待队列数值 超过该数值 拒绝接受任务
@@ -34,6 +36,6 @@ public interface JobPool
 
     JobPoolManager getJobPoolManager();
 
-    JobPool newInstance(JobPoolManager jobPoolManager);
+    JobPool newInstance(String name);
 
 }

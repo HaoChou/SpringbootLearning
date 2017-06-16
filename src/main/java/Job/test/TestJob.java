@@ -1,6 +1,6 @@
 package Job.test;
 
-
+import Job.Job;
 import Job.DefaultJobResult;
 import Job.JobResult;
 
@@ -34,7 +34,7 @@ public class TestJob implements Job
     public JobResult call() throws Exception
     {
         int r=new Random().nextInt(6)+2;
-        System.out.println("Job"+name+"开始执行"+r);
+        System.out.println("group:"+groupName+"-Job:"+name+"开始执行:"+r);
         Thread.sleep(r*1000);
         if(r>4)
         {

@@ -1,7 +1,8 @@
 package Job;
 
-import com.alibaba.dubbo.common.utils.ConcurrentHashSet;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -11,7 +12,8 @@ public class DefaultJobGroupResult implements JobGroupResult
 {
     private AtomicInteger successCount=new AtomicInteger(0);
     private AtomicInteger failedCount=new AtomicInteger(0);
-    private ConcurrentHashSet<String> failedJobNames=new ConcurrentHashSet();
+    private ConcurrentLinkedQueue failedJobNames=new ConcurrentLinkedQueue();
+//    private ConcurrentHashSet<String> failedJobNames=new ConcurrentHashSet();
     private int totalCount;
     private String groupName;
 
@@ -65,7 +67,8 @@ public class DefaultJobGroupResult implements JobGroupResult
     @Override
     public String[] getFailedNames()
     {
-        return failedJobNames.toArray(new String[0]);
+       return (String[]) failedJobNames.toArray(new String[0]);
+//        return failedJobNames.toArray(new String[0]);
     }
 
     @Override

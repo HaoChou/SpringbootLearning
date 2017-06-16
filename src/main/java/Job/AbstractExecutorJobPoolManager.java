@@ -17,7 +17,7 @@ public abstract class AbstractExecutorJobPoolManager implements JobPoolManager
     protected static List<JobPool> jobGroupList=new ArrayList<>();
     private ConcurrentHashMap<String/*groupName*/,JobGroupResult> groupResultMap=new ConcurrentHashMap();
     @Override
-    public JobPool getMostFreeJobGroup()
+    public JobPool getMostFreeJobPool()
     {
         System.out.println(jobGroupList.size());
         //todo 检查顺序
@@ -29,6 +29,7 @@ public abstract class AbstractExecutorJobPoolManager implements JobPoolManager
                 return o1.getBusyDegree()-o2.getBusyDegree();
             }
         });
+        LOG.info("MostFreeJobGroup is" +jobGroupList.get(0).getName()+"Busy degree:"+jobGroupList.get(0).getBusyDegree());
         return jobGroupList.get(0);
     }
 
@@ -63,9 +64,16 @@ public abstract class AbstractExecutorJobPoolManager implements JobPoolManager
         }
     }
 
+
+    public int getBiggestFreeQueueCount()
+    {
+        JobPool pool= getMostFreeJobPool();
+        return pool.getMaxConcurrentJobSize()+pool.getMaxJobWaitingQueueSize()-pool.getBusyDegree();
+    }
     public void pushJobGroupResult(JobGroupResult jobGroupResult)
     {
         groupResultMap.put(jobGroupResult.getGroupName(),jobGroupResult);
+        LOG.info("********put groupResultMap :"+jobGroupResult.getGroupName());
     }
 
 }

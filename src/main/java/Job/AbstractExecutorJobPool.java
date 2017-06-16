@@ -1,5 +1,6 @@
 package Job;
 
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -24,14 +25,15 @@ public abstract class AbstractExecutorJobPool implements JobPool
     public void init()
     {
 
-        pool = new ThreadPoolExecutor(getMaxConcurrentJobSize(), getMaxConcurrentJobSize(), 1, TimeUnit.HOURS, queue, new ThreadPoolExecutor.DiscardPolicy()
+        pool = new ThreadPoolExecutor(getMaxConcurrentJobSize(), getMaxConcurrentJobSize(), 1, TimeUnit.HOURS, queue, new ThreadPoolExecutor.CallerRunsPolicy()
         {
             @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor e)
             {
-                Job j = (Job) r;
+//                LOG.error("类型是"+r.getClass());
+//                Job j = (Job) r;
                 busyDegree.decrementAndGet();
-                LOG.error("线程池和等待队列都满了，任务：" + j.getName() + "被拒绝");
+                LOG.error("线程池和等待队列都满了，任务：" + "被拒绝");
             }
         });
         completionService = new ExecutorCompletionService<JobResult>(pool);
