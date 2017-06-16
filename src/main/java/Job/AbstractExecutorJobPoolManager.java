@@ -1,5 +1,7 @@
 package Job;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -7,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * Created by zhouhao on 2017/6/16.
@@ -15,7 +19,9 @@ public abstract class AbstractExecutorJobPoolManager implements JobPoolManager
 {
     private Log LOG = LogFactory.getLog(AbstractExecutorJobPoolManager.class);
     protected static List<JobPool> jobGroupList=new ArrayList<>();
-    private ConcurrentHashMap<String/*groupName*/,JobGroupResult> groupResultMap=new ConcurrentHashMap();
+//    private ConcurrentHashMap<String/*groupName*/,JobGroupResult> groupResultMap=new ConcurrentHashMap();
+
+    private Cache<String, JobGroupResult> groupResultCache= CacheBuilder.newBuilder() .maximumSize(100).expireAfterWrite(1, TimeUnit.DAYS).build();
     @Override
     public JobPool getMostFreeJobPool()
     {
@@ -35,7 +41,7 @@ public abstract class AbstractExecutorJobPoolManager implements JobPoolManager
 
     public JobGroupResult getJobProgressResultByGroupName(String jobGroupName)
     {
-        return groupResultMap.get(jobGroupName);
+        return groupResultCache.getIfPresent(jobGroupName);
     }
 
     public void  pushJobResult(JobResult result)
@@ -47,7 +53,7 @@ public abstract class AbstractExecutorJobPoolManager implements JobPoolManager
             return;
         }
 
-        JobGroupResult jobGroupResult = groupResultMap.get(groupName);
+        JobGroupResult jobGroupResult = groupResultCache.getIfPresent(groupName);
         if (null == jobGroupResult)
         {
             LOG.error("获取groupResult失败groupName:"+groupName);
@@ -72,7 +78,7 @@ public abstract class AbstractExecutorJobPoolManager implements JobPoolManager
     }
     public void pushJobGroupResult(JobGroupResult jobGroupResult)
     {
-        groupResultMap.put(jobGroupResult.getGroupName(),jobGroupResult);
+        groupResultCache.put(jobGroupResult.getGroupName(),jobGroupResult);
         LOG.info("********put groupResultMap :"+jobGroupResult.getGroupName());
     }
 

@@ -23,6 +23,8 @@ public interface JobPoolManager
 
 
     JobGroupResult getJobProgressResultByGroupName(String jobGroupName);
+
+
     /**
      * 初始化
      * 初始化 jobGroupList 根据大小创建相应的实例
