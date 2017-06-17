@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class TestExecutorPoolManager extends AbstractExecutorJobPoolManager
 {
-    static int maxGroupSize=3;
+    static int maxGroupSize=5;
     static TestExecutorPoolManager instance=new TestExecutorPoolManager();
 
     public TestExecutorPoolManager()
@@ -59,7 +59,7 @@ public class TestExecutorPoolManager extends AbstractExecutorJobPoolManager
     public static void main(String[] args) throws InterruptedException
     {
 
-        for(int t=0;t<20;t++){
+        for(int t=0;t<200;t++){
             String groupName="ZZZ"+t;
             List<TestJob> testJobList=new ArrayList<>();
             for(int i=0;i<40;i++)

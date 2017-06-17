@@ -21,7 +21,7 @@ public abstract class AbstractExecutorJobPoolManager implements JobPoolManager
     protected static List<JobPool> jobGroupList=new ArrayList<>();
 //    private ConcurrentHashMap<String/*groupName*/,JobGroupResult> groupResultMap=new ConcurrentHashMap();
 
-    private Cache<String, JobGroupResult> groupResultCache= CacheBuilder.newBuilder() .maximumSize(100).expireAfterWrite(1, TimeUnit.DAYS).build();
+    private Cache<String, JobGroupResult> groupResultCache= CacheBuilder.newBuilder() .maximumSize(10000).expireAfterWrite(1, TimeUnit.DAYS).build();
     @Override
     public JobPool getMostFreeJobPool()
     {
